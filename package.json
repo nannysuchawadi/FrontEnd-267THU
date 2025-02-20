@@ -2,8 +2,9 @@
   "name": "frontend-267thu",
   "version": "1.0.0",
   "description": "FrontEnd-267THU",
-  "main": "index.js",
+  "main": "AxiosNodeHtml.js",
   "scripts": {
+    "start": "node AxiosNodeHtml.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

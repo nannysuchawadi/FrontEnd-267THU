@@ -1,13 +1,20 @@
 const express = require('express');
 const axios = require('axios');
+const path = require("path");
 const app = express();
 var bodyParser = require('body-parser');
 
+// Base URL for the API
+// const base_url = 'https://api.example.com';
 const base_url = "http://localhost:5000";
 
+// Set the template engine
+app.set("views",path.join(__dirname,"/public/views"));
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+
+// Serve static files
 app.use(express.static(__dirname + '/public'));
 
 app.get("/", async (req, res) => {
@@ -15,17 +22,17 @@ app.get("/", async (req, res) => {
         const response = await axios.get(base_url + '/books');
         res.render("books", { books: response.data });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send('Error');
     }
 });
 
-app.get("/book/:id", async (req, res) => {
+app.get("/books/:id", async (req, res) => {
     try {
         const response = await axios.get(base_url + '/books/' + req.params.id);
         res.render("book", { book: response.data });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send('Error');
     }
 });
@@ -40,17 +47,18 @@ app.post("/create", async (req, res) => {
         await axios.post(base_url + '/books', data);
         res.redirect("/");
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send('Error');
     }
 });
 
 app.get("/update/:id", async (req, res) => {
     try {
-        const response = await axios.get(base_url + '/books/' + req.params.id);
+        const response = await axios.get(
+        base_url + '/books/' + req.params.id);
         res.render("update", { book: response.data });
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send('Error');
     }
 });
@@ -61,7 +69,7 @@ app.post("/update/:id", async (req, res) => {
         await axios.put(base_url + '/books/' + req.params.id, data);
         res.redirect("/");
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send('Error');
     }
 });
@@ -71,11 +79,11 @@ app.get("/delete/:id", async (req, res) => {
         await axios.delete(base_url + '/books/' + req.params.id);
         res.redirect("/");
     } catch (err) {
-        console.log(err);
+        console.error(err);
         res.status(500).send('Error');
     }
 });
 
-app.listen(5500, () => {
-    console.log(`http://localhost:5500`);
+app.listen(5500, () => { // Start the server
+    console.log(`Server is running on http://localhost:${5500}`);
 });
